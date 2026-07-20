@@ -1,0 +1,55 @@
+name: mirza_shop
+description: "نرم‌افزار مدیریت محصوالت فروشگاه - Mirza Shop"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # مدیریت State
+  flutter_riverpod: ^2.5.1
+
+  # دیتابیس
+  sqflite: ^2.3.2
+  sqflite_common_ffi: ^2.3.2+1
+  path: ^1.9.0
+  path_provider: ^2.1.2
+
+  # اسکن بارکد
+  mobile_scanner: ^4.0.1
+
+  # تصویر
+  image_picker: ^1.0.7
+
+  # انیمیشن
+  flutter_animate: ^4.5.0
+
+  # ابزارها
+  intl: ^0.19.0
+  uuid: ^4.3.3
+  shared_preferences: ^2.2.2
+  permission_handler: ^11.3.0
+
+  # ارتباط شبکه لوکال
+  web_socket_channel: ^2.4.4
+
+  # بکاپ
+  archive: ^3.4.10
+  file_picker: ^6.1.1
+
+  # امنیت
+  local_auth: ^2.2.0
+
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true

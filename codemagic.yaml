@@ -1,0 +1,15 @@
+workflows:
+  android-build:
+    name: ساخت APK اندروید
+    environment:
+      flutter: stable
+    scripts:
+      - name: آماده‌سازی پروژه
+        script: |
+          flutter create --platforms=android . --org com.mirzashop --project-name mirza_shop
+          flutter pub get
+      - name: ساخت APK
+        script: |
+          flutter build apk --release
+    artifacts:
+      - build/**/outputs/**/*.apk
