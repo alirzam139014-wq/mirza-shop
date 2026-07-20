@@ -1,7 +1,7 @@
 name: Build Android APK
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 jobs:
   build:
@@ -13,9 +13,19 @@ jobs:
           channel: stable
       - uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: '17'
-      - run: flutter create --platforms=android . --org com.mirzashop --project-name mirza_shop
+          distribution: zulu
+          java-version: 17
+      - name: Setup Android
+        run: flutter create --platforms=android . --org com.mirzashop --project-name mirza_shop
+      - name: Fix Android config
+        run: |
+          sed -i 's/minSdkVersion [0-9]*/minSdkVersion 21/' android/app/build.gradle
+          sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 34/' android/app/build.gradle
+          sed -i 's/targetSdkVersion [0-9]*/targetSdkVersion 34/' android/app/build.gradle
+          sed -i 's/android:minSdkVersion="[0-9]*"/android:minSdkVersion="21"/' android/app/src/main/AndroidManifest.xml
+      - name: Add permissions
+        run: |
+          sed -i '/<manifest/a\    <uses-permission android:name="android.permission.CAMERA"/>\n    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>\n    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>\n    <uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>' android/app/src/main/AndroidManifest.xml
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
