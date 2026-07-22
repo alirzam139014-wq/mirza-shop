@@ -15,17 +15,23 @@ jobs:
         with:
           distribution: zulu
           java-version: 17
-      - name: Setup Android
-        run: flutter create --platforms=android . --org com.mirzashop --project-name mirza_shop
-      - name: Fix Android config
+      - run: flutter create --platforms=android . --org com.mirzashop --project-name mirza_shop
+      - name: Fix Android
         run: |
-          sed -i 's/minSdkVersion [0-9]*/minSdkVersion 21/' android/app/build.gradle
-          sed -i 's/compileSdkVersion [0-9]*/compileSdkVersion 34/' android/app/build.gradle
-          sed -i 's/targetSdkVersion [0-9]*/targetSdkVersion 34/' android/app/build.gradle
-          sed -i 's/android:minSdkVersion="[0-9]*"/android:minSdkVersion="21"/' android/app/src/main/AndroidManifest.xml
-      - name: Add permissions
-        run: |
-          sed -i '/<manifest/a\    <uses-permission android:name="android.permission.CAMERA"/>\n    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>\n    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>\n    <uses-permission android:name="android.permission.INTERNET"/>\n    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>' android/app/src/main/AndroidManifest.xml
+          echo "android.useAndroidX=true" >> android/gradle.properties
+          echo "android.enableJetifier=true" >> android/gradle.properties
+          cd android/app
+          if [ -f build.gradle.kts ]; then
+            sed -i 's/minSdk = .*/minSdk = 21/' build.gradle.kts
+            sed -i 's/compileSdk = .*/compileSdk = 34/' build.gradle.kts
+            sed -i 's/targetSdk = .*/targetSdk = 34/' build.gradle.kts
+          fi
+          if [ -f build.gradle ]; then
+            sed -i 's/minSdkVersion .*/minSdkVersion 21/' build.gradle
+            sed -i 's/compileSdkVersion .*/compileSdkVersion 34/' build.gradle
+            sed -i 's/targetSdkVersion .*/targetSdkVersion 34/' build.gradle
+          fi
+          cd ../..
       - run: flutter pub get
       - run: flutter build apk --release
       - uses: actions/upload-artifact@v4
